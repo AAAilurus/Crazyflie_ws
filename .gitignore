@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+plot_env/
+.env
+
+# Editors
+.vscode/
+.idea/
+*~
+
+# Flight logs
+*.log
+*.txt
+
+# Generated training data
+cflib_python/training_data/*.csv
+!cflib_python/training_data/.gitkeep
+
+# IRL generated results
+cflib_python/IRL_real/results/*
+!cflib_python/IRL_real/results/.gitkeep
+
+# Learned runtime data
+cflib_python/IRL_real/data/forward_excited_182749/*
+!cflib_python/IRL_real/data/forward_excited_182749/.gitkeep
+
+# Dual-flight outputs
+cflib_python/dual_demo_*/
+cflib_python/experiments/
+
+# Plots generated from experiments
+*.png
+*.pdf
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Experimental data and generated results
+*.csv
+*.txt
+*.log
+*.png
+__pycache__/
+*.pyc
