@@ -57,8 +57,8 @@ except ModuleNotFoundError as exc:
         ) from exc
     raise
 
-from controller_erau_original.controller_pid import ControllerPID
-from controller_erau_original.controller_types import (
+from pid_controller.controller_pid import ControllerPID
+from pid_controller.controller_types import (
     AccData,
     Attitude,
     AttitudeRate,
@@ -75,7 +75,7 @@ from controller_erau_original.controller_types import (
     Velocity,
     quat2rpy,
 )
-from motorRaw import MotorRaw
+from lqr_pid_motor_raw import MotorRaw
 
 logging.basicConfig(level=logging.ERROR)
 

@@ -478,7 +478,7 @@ def main():
 
     parser.add_argument(
         "--result-dir",
-        default="IRL_real/results/spsa_current",
+        default="lqr_irl/results/spsa_current",
         help="Directory for SPSA outputs.",
     )
 

@@ -17,39 +17,39 @@ ROOT = Path(__file__).resolve().parent
 # CURRENT WORKING FILES — DO NOT CHANGE
 # ============================================================
 
-COLLECTOR = ROOT / "UTA_lighthouse_irl_hover21.py"
+COLLECTOR = ROOT / "lqr_irl_collect.py"
 
 SPSA = (
     ROOT
-    / "IRL_real"
+    / "lqr_irl"
     / "learning"
-    / "spsa_matlab_version.py"
+    / "lqr_irl_spsa.py"
 )
 
-LEADER = ROOT / "UTA_lighthouse_leader_dual_exact.py"
+LEADER = ROOT / "lqr_expert_flight.py"
 
-FOLLOWER = ROOT / "UTA_lighthouse_follower_dual_182749.py"
+FOLLOWER = ROOT / "lqr_learned_flight.py"
 
-DUAL_RUNNER = ROOT / "run_two_cf_182749_SEQUENTIAL.py"
+DUAL_RUNNER = ROOT / "lqr_validation_sequential.py"
 
-DUAL_PLOTTER = ROOT / "plot_dual_demo_182749.py"
+DUAL_PLOTTER = ROOT / "lqr_validation_plot.py"
 
 TRAINING_DIR = ROOT / "training_data"
 
 FOLLOWER_DATA_DIR = (
     ROOT
-    / "IRL_real"
+    / "lqr_irl"
     / "data"
-    / "forward_excited_182749"
+    / "lqr_irl_learned"
 )
 
 RESULT_ROOT = (
     ROOT
-    / "IRL_real"
+    / "lqr_irl"
     / "results"
 )
 
-DUAL_DIR = ROOT / "dual_demo_182749"
+DUAL_DIR = ROOT / "lqr_validation_results"
 
 PLOT_PYTHON = ROOT / "plot_env" / "bin" / "python3"
 

@@ -20,7 +20,7 @@ from cflib.utils.callbacks import Caller
 logger = logging.getLogger(__name__)
 
 
-MotorRawPacket = collections.namedtuple("motorRawPacket", ["m1", "m2", "m3", "m4"])
+MotorRawPacket = collections.namedtuple("lqr_pid_motor_rawPacket", ["m1", "m2", "m3", "m4"])
 MOTOR_RAW_PORT = 0x09
 data_json = {"velocities": [], "start_time": 0}
 
@@ -102,4 +102,4 @@ class MotorRaw:
         try:
             self._node.publish_motor_raw(m1, m2, m3, m4)
         except Exception as exc:
-            print(f"[motorRaw] ROS publish skipped: {exc}")
+            print(f"[lqr_pid_motor_raw] ROS publish skipped: {exc}")

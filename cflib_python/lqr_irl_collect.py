@@ -58,9 +58,9 @@ except ModuleNotFoundError as exc:
         ) from exc
     raise
 
-from UTA_LQR.UTA_outer_lqr_gazebo import GazeboOuterLQR
-from controller_lqr_real_200hz_FINAL_STABLE_1M.controller_pid import ControllerPID
-from controller_lqr_real_200hz_FINAL_STABLE_1M.controller_types import (
+from lqr_controller.lqr_outer import GazeboOuterLQR
+from lqr_inner_pid.controller_pid import ControllerPID
+from lqr_inner_pid.controller_types import (
     AccData,
     Attitude,
     AttitudeRate,
@@ -77,7 +77,7 @@ from controller_lqr_real_200hz_FINAL_STABLE_1M.controller_types import (
     Velocity,
     quat2rpy,
 )
-from motorRaw import MotorRaw
+from lqr_pid_motor_raw import MotorRaw
 
 logging.basicConfig(level=logging.ERROR)
 

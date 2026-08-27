@@ -58,9 +58,9 @@ except ModuleNotFoundError as exc:
         ) from exc
     raise
 
-from UTA_LQR.UTA_outer_lqr_gazebo import GazeboOuterLQR
-from controller_lqr_real_200hz_FINAL_STABLE_1M.controller_pid import ControllerPID
-from controller_lqr_real_200hz_FINAL_STABLE_1M.controller_types import (
+from lqr_controller.lqr_outer import GazeboOuterLQR
+from lqr_inner_pid.controller_pid import ControllerPID
+from lqr_inner_pid.controller_types import (
     AccData,
     Attitude,
     AttitudeRate,
@@ -77,7 +77,7 @@ from controller_lqr_real_200hz_FINAL_STABLE_1M.controller_types import (
     Velocity,
     quat2rpy,
 )
-from motorRaw_dual_100hz import MotorRaw
+from lqr_pid_motor_raw_dual import MotorRaw
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -278,6 +278,128 @@ class HostPIDPWMPositionController:
             max_angle_deg=1.0,
             max_az_mps2=15.0,
         )
+
+        # ====================================================
+        # IRL FOLLOWER: LEARNED Q AND LEARNED K
+        # ====================================================
+        #
+        # Q_learned is the recovered expert objective.
+        #
+        # K_learned is the corresponding policy recovered by
+        # the model-free Q-function/SPSA procedure.
+        #
+        # IMPORTANT:
+        # Do NOT recompute K using DARE here.
+        # The model-free IRL algorithm already produced the
+        # K that belongs to its recovered Q-function.
+        # ====================================================
+
+        learned_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "lqr_irl",
+            "data",
+            "lqr_irl_learned",
+        )
+
+        q_path = os.path.join(
+            learned_dir,
+            "Q_learned.csv",
+        )
+
+        k_path = os.path.join(
+            learned_dir,
+            "K_learned_real.csv",
+        )
+
+        # Q_learned.csv format:
+        #
+        #   index,value
+        #   0,q1
+        #   ...
+        #   5,q6
+        #
+        q_table = np.loadtxt(
+            q_path,
+            delimiter=",",
+            skiprows=1,
+        )
+
+        learned_q_diag = np.asarray(
+            q_table[:, 1],
+            dtype=float,
+        )
+
+        learned_K = np.loadtxt(
+            k_path,
+            delimiter=",",
+            skiprows=1,
+        )
+
+        if learned_q_diag.shape != (6,):
+            raise RuntimeError(
+                f"Expected learned Q diagonal shape (6,), "
+                f"got {learned_q_diag.shape}"
+            )
+
+        if learned_K.shape != (3, 6):
+            raise RuntimeError(
+                f"Expected learned K shape (3,6), "
+                f"got {learned_K.shape}"
+            )
+
+        if not np.all(np.isfinite(learned_q_diag)):
+            raise RuntimeError(
+                "Q_learned contains non-finite values"
+            )
+
+        if not np.all(np.isfinite(learned_K)):
+            raise RuntimeError(
+                "K_learned contains non-finite values"
+            )
+
+        # Store the complete learned IRL result.
+        self.learned_Q = np.diag(
+            learned_q_diag
+        )
+
+        self.learned_R = np.diag(
+            [6.0, 6.0, 2.0]
+        )
+
+        self.learned_K = learned_K.copy()
+
+        # Put the learned objective/policy into the
+        # follower outer-LQR object.
+        self.outer_lqr.Q = (
+            self.learned_Q.copy()
+        )
+
+        self.outer_lqr.R = (
+            self.learned_R.copy()
+        )
+
+        # THIS is the gain actually used by compute():
+        #
+        #       u = -K_learned e
+        #
+        self.outer_lqr.K = (
+            self.learned_K.copy()
+        )
+
+        print()
+        print("============================================")
+        print("IRL FOLLOWER CONTROLLER")
+        print("============================================")
+        print("Q_learned =")
+        print(self.learned_Q)
+        print()
+        print("R_fixed =")
+        print(self.learned_R)
+        print()
+        print("K_learned =")
+        print(self.learned_K)
+        print("============================================")
+        print()
 
         # Outer LQR updates at 100 Hz.
         # Host/inner controller runs at 500 Hz.

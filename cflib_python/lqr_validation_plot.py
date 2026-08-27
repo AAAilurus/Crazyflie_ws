@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-DATA_DIR = Path("dual_demo_182749")
+DATA_DIR = Path("lqr_validation_results")
 
 LEADER_FILE = DATA_DIR / "leader_expert.csv"
 FOLLOWER_FILE = DATA_DIR / "follower_learned_182749.csv"

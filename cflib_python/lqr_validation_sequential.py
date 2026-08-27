@@ -11,11 +11,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 TRAINING_DIR = ROOT / "training_data"
-OUT_DIR = ROOT / "dual_demo_182749"
+OUT_DIR = ROOT / "lqr_validation_results"
 OUT_DIR.mkdir(exist_ok=True)
 
-LEADER_SCRIPT = ROOT / "UTA_lighthouse_leader_dual_exact.py"
-FOLLOWER_SCRIPT = ROOT / "UTA_lighthouse_follower_dual_182749.py"
+LEADER_SCRIPT = ROOT / "lqr_expert_flight.py"
+FOLLOWER_SCRIPT = ROOT / "lqr_learned_flight.py"
 
 
 def find_new_csv(before, start_time):
