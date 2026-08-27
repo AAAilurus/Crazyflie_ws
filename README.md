@@ -1,7 +1,7 @@
 # Crazyflie Lighthouse LQR and Inverse Reinforcement Learning
 
 **Author:** Basanta Adhikari  
-**Affiliation:** The University of Texas at Arlington (UTA)
+ (UTA)
 
 This repository contains the working Crazyflie real-flight control
 and inverse reinforcement learning framework developed for
